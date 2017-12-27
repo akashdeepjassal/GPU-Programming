@@ -161,7 +161,7 @@ Precisely, the kernel compilation in OpenCL is make in running time (library cal
 In Gcc, for compilation, you only need the headers (aviables on Kronos site). But for linkage, you have to install OpenCL compatible driver.
 
 * for Mac OSX : gcc filename.c -o filename -framework OpenCL
-* for Linux : gcc filename.c -o filename -/usr/lib/x86_64-linux-gnu/libOpenCL.so
+* for Linux : gcc/clang filename.c -o filename -/usr/lib/x86_64-linux-gnu/libOpenCL.so
 
 
 ref: How to compile OpenCL example in GCC?  
