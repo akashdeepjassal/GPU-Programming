@@ -27,7 +27,7 @@ $ sudo apt-get install build-essential g++ cmake
 $ sudo apt-get install clang libclang-3.4-dev libclang-dev libclang1
 $ sudo apt-get install ocl-icd-opencl-dev ocl-icd-libopencl1
 $ sudo apt-get install opencl-headers ocl-icd-dev ocl-icd-libopencl1
-$ sudo apt-get install mesa
+$ sudo apt-get install mesa-*
 
 
 $ sudo apt install ocl-icd-libopencl1
