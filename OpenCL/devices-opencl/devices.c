@@ -7,72 +7,51 @@
 #include <CL/cl.h>
 #endif
 
-int main() {
+int main(int argc, char const *argv[]) {
 
-    int i, j;
-    char* value;
-    size_t valueSize;
-    cl_uint platformCount;
-    cl_platform_id* platforms;
-    cl_uint deviceCount;
-    cl_device_id* devices;
-    cl_uint maxComputeUnits;
+	printf("===Device Query===\n");
 
-    // get all platforms
-    clGetPlatformIDs(0, NULL, &platformCount);
-    platforms = (cl_platform_id*) malloc(sizeof(cl_platform_id) * platformCount);
-    clGetPlatformIDs(platformCount, platforms, NULL);
+	cl_uint 			numPlatforms;
+	clGetPlatformIDs(0, NULL, &numPlatforms);
+	printf("Number of OpenCL platforms: %d\n", numPlatforms);
 
-    for (i = 0; i < platformCount; i++) {
+	cl_platform_id platforms[numPlatforms];
+	clGetPlatformIDs(numPlatforms, platforms, NULL);
 
-        // get all devices
-        clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, NULL, &deviceCount);
-        devices = (cl_device_id*) malloc(sizeof(cl_device_id) * deviceCount);
-        clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, deviceCount, devices, NULL);
+	cl_char string[1000];
 
-        // for each device print critical attributes
-        for (j = 0; j < deviceCount; j++) {
+	// info about each platform
+	int i, j;
+	cl_uint number;
+	for (i = 0; i < numPlatforms; i++) {
 
-            // print device name
-            clGetDeviceInfo(devices[j], CL_DEVICE_NAME, 0, NULL, &valueSize);
-            value = (char*) malloc(valueSize);
-            clGetDeviceInfo(devices[j], CL_DEVICE_NAME, valueSize, value, NULL);
-            printf("%d. Device: %s\n", j+1, value);
-            free(value);
+		clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, sizeof(string), &string, NULL);
+		printf("%d: %s\n", (i+1), string);
+		clGetPlatformInfo(platforms[i], CL_PLATFORM_VERSION, sizeof(string), &string, NULL);
+		printf("\tOpenCL Version: %s\n", string);
 
-            // print hardware device version
-            clGetDeviceInfo(devices[j], CL_DEVICE_VERSION, 0, NULL, &valueSize);
-            value = (char*) malloc(valueSize);
-            clGetDeviceInfo(devices[j], CL_DEVICE_VERSION, valueSize, value, NULL);
-            printf(" %d.%d Hardware version: %s\n", j+1, 1, value);
-            free(value);
+		// find devices in each platform
+		cl_uint num_devices;
+		clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices);
+		cl_device_id devices[num_devices];
+		clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ALL, num_devices, devices, NULL);
+		printf("\tNumber of devices: %d\n", num_devices);
 
-            // print software driver version
-            clGetDeviceInfo(devices[j], CL_DRIVER_VERSION, 0, NULL, &valueSize);
-            value = (char*) malloc(valueSize);
-            clGetDeviceInfo(devices[j], CL_DRIVER_VERSION, valueSize, value, NULL);
-            printf(" %d.%d Software version: %s\n", j+1, 2, value);
-            free(value);
+		// info about each device
+		for (j = 0; j < num_devices; ++j) {
+			clGetDeviceInfo(devices[j], CL_DEVICE_NAME, sizeof(string), &string, NULL);
+			printf("\t%d.%d: %s\n", (i+1), (j+1), string);
+			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(cl_uint), &number, NULL);
+			printf("\t\tMax Compute Units: %d\n", number);
+			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_GROUP_SIZE, sizeof(cl_uint), &number, NULL);
+			printf("\t\tMax Work Group Size: %d\n", number);
+			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(cl_uint), &number, NULL);
+			printf("\t\tMax Work Item Dim: %d\n", number);
+			size_t arr[3];
+			clGetDeviceInfo(devices[j], CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(arr), &arr, NULL);
+			printf("\t\tMax Work Item Size: %d, %d, %d\n", arr[0], arr[1], arr[2]);
+		}
+	}
 
-            // print c version supported by compiler for device
-            clGetDeviceInfo(devices[j], CL_DEVICE_OPENCL_C_VERSION, 0, NULL, &valueSize);
-            value = (char*) malloc(valueSize);
-            clGetDeviceInfo(devices[j], CL_DEVICE_OPENCL_C_VERSION, valueSize, value, NULL);
-            printf(" %d.%d OpenCL C version: %s\n", j+1, 3, value);
-            free(value);
-
-            // print parallel compute units
-            clGetDeviceInfo(devices[j], CL_DEVICE_MAX_COMPUTE_UNITS,
-                    sizeof(maxComputeUnits), &maxComputeUnits, NULL);
-            printf(" %d.%d Parallel compute units: %d\n", j+1, 4, maxComputeUnits);
-
-        }
-
-        free(devices);
-
-    }
-
-    free(platforms);
-    return 0;
-
+	return EXIT_SUCCESS;
 }
