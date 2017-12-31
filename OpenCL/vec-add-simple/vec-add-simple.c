@@ -2,8 +2,9 @@
 #include <stdlib.h>
 
 /* OpenCL Header file */
-#include <CL/cl.h>
 #define CL_USE_DEPRECATED_OPENCL_1_2_APIS
+
+#include <CL/cl.h>
 
 /* OpenCL Kernel function */
 const char *program_source =
@@ -87,8 +88,8 @@ int main () {
 
     /* create OpenCL kernel, which is used to make vector addition */
     cl_kernel kernel = clCreateKernel (program, "vec_add", NULL);
-
     /* parameter transport from host to OpenCL kernel function */
+    
     clSetKernelArg (kernel, 0, sizeof (cl_mem), &buffer_a);
     clSetKernelArg (kernel, 1, sizeof (cl_mem), &buffer_b);
     clSetKernelArg (kernel, 2, sizeof (cl_mem), &buffer_c);

@@ -24,7 +24,7 @@ $ ./make.sh
 If build's okay, you can execute `./bandwidth` first to check how to use:
 
 ```shell
-$ ./bandwidth 
+$ ./bandwidth
 >>> [USAGE] ./bandwidth HEGHTA WIDTHA KERNEL_FILE_PATH KERNEL_FUNC_NAME LOOP_EXECUTION_TIMES GLOBAL_WORK_SIZE[0] GLOBAL_WORK_SIZE[1] GLOBAL_WORK_SIZE[2]
 
 ============== INIT ==============
@@ -34,7 +34,7 @@ $ ./bandwidth
 >>> [ERROR] please input args
 ```
 
-Assuming a 2048\*2048 matrix, preparing-execution kernel file is `kernel.cl`, preparing-execution function is `global_bandwidth_vec1` (`vec1` representing non-vectorization) and run `100` times to measure bandwidth, global work size is (2048\*2048, 1, 1): 
+Assuming a 2048\*2048 matrix, preparing-execution kernel file is `kernel.cl`, preparing-execution function is `global_bandwidth_vec1` (`vec1` representing non-vectorization) and run `100` times to measure bandwidth, global work size is (2048\*2048, 1, 1):
 
 ```shell
 # >>> [USAGE] ./bandwidth HEGHTA WIDTHA KERNEL_FILE_PATH KERNEL_FUNC_NAME LOOP_EXECUTION_TIMES GLOBAL_WORK_SIZE[0] GLOBAL_WORK_SIZE[1] GLOBAL_WORK_SIZE[2]
@@ -71,7 +71,7 @@ Change these lines in `bandwidth.c`:
 ```cc
 #define   ELEM_TYPE                     __fp16
 #define   ELEM_TYPE_STR                 "__fp16"
-#define   CL_ELEM_TYPE                  cl_half 
+#define   CL_ELEM_TYPE                  cl_half
 #define   CL_ELEM_TYPE_STR              "half"
 ```
 
@@ -95,7 +95,7 @@ Change these lines in `bandwidth.c`:
 ```cc
 #define   ELEM_TYPE                     __fp16
 #define   ELEM_TYPE_STR                 "__fp16"
-#define   CL_ELEM_TYPE                  cl_half 
+#define   CL_ELEM_TYPE                  cl_half
 #define   CL_ELEM_TYPE_STR              "half16"
 ```
 

@@ -193,7 +193,7 @@ int main(void) {
     // Number of work items in each local work group
     local_work_size = len;
     // Number of total work items - localSize must be devisor
-    global_work_size = (size_t) ceil( len / (float) local_work_size ) * local_work_size;
+    global_work_size = (size_t) ( len / (float) local_work_size ) * local_work_size;
 
 	//size_t local_work_size[2] = { 8, 8 };
 	//size_t global_work_size[2] = { 1, len };
